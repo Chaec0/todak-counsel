@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>대학생 전용 토닥이의 고민 상담소</title>
+  <meta name="description" content="모든 고민에 당장 답이 필요한 것은 아니에요. 토끼 토닥이가 대학생의 마음에 공감해 주는 2분짜리 힐링 공간.">
+  <meta name="theme-color" content="#FFF3E4">
+  <meta name="robots" content="noindex, nofollow"><!-- 검색 결과에 나오지 않게 요청 -->
+  <!-- 글꼴과 저장 도구는 외부에서 받아오므로, 응답이 늦어도 화면을 막지 않게 따로 불러온다 -->
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" id="app">
+
+    <!-- Scene 1. 메인 화면 -->
+    <section class="scene scene--room is-active" id="scene-main" tabindex="-1">
+      <div class="room" aria-hidden="true">
+        <div class="room__window"></div>
+        <div class="room__lamp"></div>
+        <div class="room__floor"></div>
+        <div class="room__rug"></div>
+        <span class="room__todak"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+      </div>
+      <div class="panel">
+        <p class="panel__eyebrow">대학생 전용 토닥이의 고민 상담소</p>
+        <h1 class="panel__title">오늘은 어떤 일이 있었어?</h1>
+        <button type="button" class="btn btn--primary" id="btn-start">시작하기</button>
+      </div>
+    </section>
+
+    <!-- Scene 2. 고민 선택 -->
+    <section class="scene scene--choose" id="scene-choose" tabindex="-1">
+      <header class="choose__header">
+        <span class="choose__todak" aria-hidden="true"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+        <h2 class="choose__title">요즘 어떤 고민이 <br>마음에 남아 있어?</h2>
+      </header>
+      <div class="choose__cards">
+        <button type="button" class="worry-card worry-card--anxiety" data-type="anxiety">
+          <span class="worry-card__icon" aria-hidden="true">📖</span>
+          <span class="worry-card__body">
+            <span class="worry-card__head">
+              <strong class="worry-card__title">학업 및 진로</strong>
+              <span class="worry-card__emotion">불안</span>
+            </span>
+            <span class="worry-card__desc">시험, 과제, 취업 준비, 미래에 대한 불안</span>
+          </span>
+        </button>
+        <button type="button" class="worry-card worry-card--lonely" data-type="lonely">
+          <span class="worry-card__icon" aria-hidden="true">👥</span>
+          <span class="worry-card__body">
+            <span class="worry-card__head">
+              <strong class="worry-card__title">인간관계</strong>
+              <span class="worry-card__emotion">외로움</span>
+            </span>
+            <span class="worry-card__desc">친구와의 갈등, 소외감, 타인의 시선</span>
+          </span>
+        </button>
+        <button type="button" class="worry-card worry-card--guilt" data-type="guilt">
+          <span class="worry-card__icon" aria-hidden="true">🌱</span>
+          <span class="worry-card__body">
+            <span class="worry-card__head">
+              <strong class="worry-card__title">자기 자신</strong>
+              <span class="worry-card__emotion">자책</span>
+            </span>
+            <span class="worry-card__desc">자신감 부족, 실수, 타인과의 비교</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Scene 3. 영상 재생 -->
+    <section class="scene scene--video" id="scene-video" tabindex="-1">
+      <!-- 영상이 뜨기 전 대기 화면이자, 영상 파일이 없을 때의 placeholder -->
+      <div class="video-wait">
+        <span class="video-wait__todak" aria-hidden="true"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+        <div class="video-wait__notice" id="video-notice" role="status" hidden>
+          <p class="video-wait__text">토닥이가 준비 중이에요</p>
+          <div class="video-wait__bar"><span id="video-bar"></span></div>
+        </div>
+      </div>
+      <video class="video-player" id="video-player" playsinline muted preload="auto" aria-label="토닥이 영상"></video>
+      <button type="button" class="btn-play" id="btn-play" hidden>▶ 눌러서 재생하기</button>
+      <div class="video-controls">
+        <button type="button" class="btn-chip" id="btn-sound" aria-pressed="false" hidden>🔇 소리 켜기</button>
+        <button type="button" class="btn-chip btn-chip--skip" id="btn-skip">건너뛰기</button>
+      </div>
+    </section>
+
+    <!-- LAST Scene. 마무리 -->
+    <section class="scene scene--room scene--last" id="scene-last" tabindex="-1">
+      <div class="room room--evening" aria-hidden="true">
+        <div class="room__window"></div>
+        <div class="room__lamp"></div>
+        <div class="room__floor"></div>
+        <div class="room__rug"></div>
+        <span class="room__heart">♡</span>
+        <span class="room__todak"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+      </div>
+      <div class="panel">
+        <h2 class="panel__title">조금이라도 마음이 <br>가벼워졌으면 좋겠어.</h2>
+        <button type="button" class="btn btn--primary" id="btn-cheer">오늘의 응원 메시지 받기</button>
+        <button type="button" class="btn btn--ghost" id="btn-again">다른 고민 이야기하기</button>
+      </div>
+    </section>
+
+    <!-- 오늘의 응원 카드 (아래에서 올라오는 시트) -->
+    <div class="sheet-backdrop" id="sheet-backdrop"></div>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="cheer-label" tabindex="-1">
+      <div class="cheer-card" id="cheer-card">
+        <img class="cheer-card__todak" id="cheer-todak" alt="">
+        <p class="cheer-card__label" id="cheer-label">오늘의 응원</p>
+        <p class="cheer-card__message" id="cheer-message"></p>
+        <p class="cheer-card__sign">토닥이가</p>
+      </div>
+      <p class="sheet__status" id="sheet-status" role="status"></p>
+      <div class="sheet__actions">
+        <button type="button" class="btn btn--primary" id="btn-save">이미지로 저장</button>
+        <button type="button" class="btn btn--ghost" id="btn-close">닫기</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="assets/todak_card.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
