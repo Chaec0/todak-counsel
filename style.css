@@ -41,6 +41,7 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  overflow: clip; /* 숨겨 둔 응원 카드 때문에 화면이 밀리지 않게 스크롤 자체를 막는다 */
   background: var(--cream);
 }
 
@@ -50,6 +51,14 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
     height: min(calc(100dvh - 48px), 860px);
     border-radius: 32px;
     box-shadow: 0 24px 60px rgba(150, 100, 70, 0.25);
+    transition: width var(--fade) ease, height var(--fade) ease;
+  }
+
+  /* 가로 영상을 볼 때만 틀을 16:9로 넓힌다 */
+  .app.is-landscape-video {
+    --video-w: min(calc(100vw - 48px), calc((100dvh - 48px) * 16 / 9), 1200px);
+    width: var(--video-w);
+    height: calc(var(--video-w) * 9 / 16);
   }
 }
 
@@ -122,6 +131,20 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 
 .panel__eyebrow { font-size: 0.8125rem; font-weight: 600; color: var(--ink-soft); }
 .panel__title { margin-bottom: 8px; font-size: 1.5rem; font-weight: 700; line-height: 1.4; }
+[data-focus] { outline: none; }
+
+/* 치유포인트 */
+.healing { display: grid; justify-items: center; gap: 6px; margin-bottom: 8px; }
+
+.healing__chip {
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--butter);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.healing__line { font-size: 0.8125rem; line-height: 1.45; color: var(--ink-soft); }
 
 .room {
   position: absolute;
@@ -210,18 +233,32 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   position: absolute;
   left: 50%;
   bottom: 6%;
-  font-size: clamp(64px, 12vh, 92px);
-  line-height: 1;
+  --todak-h: clamp(112px, 21vh, 190px);
   transform: translateX(-50%);
   transform-origin: bottom center;
   animation: breathe 3.6s ease-in-out infinite;
 }
 
-/* 토닥이 그림 (파일이 없으면 🐰 글자가 대신 나온다) */
-.room__todak img {
-  display: block;
-  height: clamp(112px, 21vh, 190px);
-  filter: drop-shadow(0 5px 6px rgba(150, 100, 70, 0.28));
+/* 토닥이 그림과, 파일이 없을 때 나오는 점선 박스 */
+[data-todak] { display: block; height: var(--todak-h); }
+.room__todak [data-todak] { filter: drop-shadow(0 5px 6px rgba(150, 100, 70, 0.28)); }
+
+.todak-empty {
+  display: grid;
+  place-items: center;
+  width: calc(var(--todak-h) * 0.8);
+  min-width: 96px;
+  height: var(--todak-h);
+  margin: 0 auto;
+  padding: 4px;
+  border: 2px dashed var(--ink-soft);
+  border-radius: 18px;
+  background: rgba(255, 250, 243, 0.6);
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
 }
 
 .room__heart {
@@ -252,8 +289,15 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 }
 
 /* 낮은 화면에서는 하트가 패널에 걸리므로 숨긴다 */
-@media (max-height: 640px) {
+@media (max-height: 700px) {
   .room__heart { display: none; }
+}
+
+/* 마지막 Scene은 패널이 길어 스탠드를 빼고, 낮은 화면에서는 토닥이를 줄여 패널에 가리지 않게 한다 */
+.scene--last .room__lamp { display: none; }
+
+@media (max-height: 700px) {
+  .scene--last .room__todak { --todak-h: clamp(72px, 13vh, 112px); }
 }
 
 /* ===== Scene 2. 고민 선택 ===== */
@@ -267,8 +311,8 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 }
 
 .choose__header { text-align: center; }
-.choose__todak { display: block; margin-bottom: 8px; font-size: 44px; line-height: 1; }
-.choose__todak img { display: block; height: clamp(48px, 9vh, 78px); margin: 0 auto; }
+.choose__todak { display: block; margin-bottom: 8px; --todak-h: clamp(48px, 9vh, 78px); }
+.choose__todak img { margin: 0 auto; }
 .choose__title { font-size: 1.4375rem; font-weight: 700; line-height: 1.4; }
 .choose__cards { display: grid; gap: 14px; }
 
@@ -349,7 +393,21 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   transition: opacity var(--fade) ease;
 }
 
-.has-video .video-player { opacity: 1; }
+.has-video .video-player, .has-poster .video-player { opacity: 1; }
+
+/* 영상이 끝나면 1초 동안 부드럽게 사라진다 */
+.scene--video.is-ending::before, .scene--video.is-ending .video-player {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.is-ending .video-controls, .is-ending .video-bottom {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+video::cue { font-family: var(--font); font-size: 1rem; line-height: 1.4; }
 
 .video-wait {
   position: absolute;
@@ -363,20 +421,20 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   text-align: center;
 }
 
+/* 포스터나 영상 위에 뜰 때는 글자가 잘 보이게 배경을 깐다 */
+.has-poster .video-wait, .has-video .video-wait { background: rgba(255, 246, 234, 0.82); }
+
 .video-wait__todak {
-  font-size: 84px;
-  line-height: 1;
+  --todak-h: 180px;
   animation: breathe-still 3.6s ease-in-out infinite;
 }
-
-.video-wait__todak img { display: block; height: 180px; }
 
 @keyframes breathe-still {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.04, 0.97); }
 }
 
-.video-wait__notice { display: grid; gap: 16px; width: min(260px, 100%); animation: fade-in var(--fade) ease; }
+.video-wait__notice { display: grid; gap: 16px; width: min(280px, 100%); animation: fade-in var(--fade) ease; }
 .video-wait__text { font-size: 1.125rem; font-weight: 600; }
 .video-wait__bar { height: 6px; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, 0.7); }
 
@@ -411,7 +469,45 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   font-weight: 600;
 }
 
-.btn-chip--skip { margin-left: auto; }
+.btn-chip--skip { margin-left: auto; animation: fade-in var(--fade) ease; }
+
+/* 소리가 꺼져 있을 때 눈에 띄는 소리 켜기 버튼 */
+.btn-chip--attention {
+  background: var(--apricot-deep);
+  animation: pulse-sound 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-sound {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 190, 148, 0.75); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 190, 148, 0); }
+}
+
+/* 하단: 일시정지 버튼과 얇은 진행바 */
+.video-bottom {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.video-bottom .btn-chip { margin-left: 16px; }
+
+.video-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 250, 243, 0.3);
+}
+
+.video-progress span {
+  display: block;
+  height: 100%;
+  background: var(--apricot-deep);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s linear;
+}
 
 .btn-play {
   position: absolute;
@@ -475,8 +571,20 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 
 .cheer-card__todak { display: block; height: 88px; margin: 0 auto 12px; }
 .cheer-card__label { font-size: 0.875rem; font-weight: 700; color: var(--ink-soft); }
-.cheer-card__message { margin: 16px 0 18px; font-size: 1.25rem; font-weight: 600; line-height: 1.6; }
+
+.cheer-card__keyword {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 11px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.cheer-card__message { margin: 14px 0 16px; font-size: 1.25rem; font-weight: 600; line-height: 1.6; }
 .cheer-card__sign { font-size: 0.9375rem; color: var(--ink-soft); }
+.cheer-card__service { margin-top: 14px; font-size: 0.6875rem; color: var(--ink-soft); }
 
 .sheet__status { min-height: 1.4em; margin: 8px 0; font-size: 0.8125rem; line-height: 1.4; text-align: center; color: var(--ink-soft); }
 .sheet__actions { display: grid; gap: 10px; }
@@ -484,5 +592,5 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 /* 움직임을 줄이도록 설정한 사용자 배려 */
 @media (prefers-reduced-motion: reduce) {
   :root { --fade: 0.01s; }
-  .room__todak, .room__heart, .video-wait__todak { animation: none; }
+  .room__todak, .room__heart, .video-wait__todak, .btn-chip--attention { animation: none; }
 }

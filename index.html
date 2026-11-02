@@ -21,7 +21,7 @@
         <div class="room__lamp"></div>
         <div class="room__floor"></div>
         <div class="room__rug"></div>
-        <span class="room__todak"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+        <span class="room__todak"><img data-todak alt=""></span>
       </div>
       <div class="panel">
         <p class="panel__eyebrow">대학생 전용 토닥이의 고민 상담소</p>
@@ -33,7 +33,7 @@
     <!-- Scene 2. 고민 선택 -->
     <section class="scene scene--choose" id="scene-choose" tabindex="-1">
       <header class="choose__header">
-        <span class="choose__todak" aria-hidden="true"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+        <span class="choose__todak" aria-hidden="true"><img data-todak alt=""></span>
         <h2 class="choose__title">요즘 어떤 고민이 <br>마음에 남아 있어?</h2>
       </header>
       <div class="choose__cards">
@@ -72,19 +72,26 @@
 
     <!-- Scene 3. 영상 재생 -->
     <section class="scene scene--video" id="scene-video" tabindex="-1">
-      <!-- 영상이 뜨기 전 대기 화면이자, 영상 파일이 없을 때의 placeholder -->
-      <div class="video-wait">
-        <span class="video-wait__todak" aria-hidden="true"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
-        <div class="video-wait__notice" id="video-notice" role="status" hidden>
-          <p class="video-wait__text">토닥이가 준비 중이에요</p>
-          <div class="video-wait__bar"><span id="video-bar"></span></div>
+      <!-- 자막 파일 경로는 script.js의 VIDEOS에서 넣는다 (없으면 무시) -->
+      <video class="video-player" id="video-player" playsinline muted preload="auto" aria-label="토닥이 단편 애니메이션">
+        <track id="video-track" kind="subtitles" srclang="ko" label="한국어">
+      </video>
+      <!-- 영상 로딩 안내이자, 영상 파일이 없을 때의 placeholder -->
+      <div class="video-wait" id="video-wait" hidden>
+        <span class="video-wait__todak" aria-hidden="true"><img data-todak alt=""></span>
+        <div class="video-wait__notice">
+          <p class="video-wait__text" id="video-wait-text" role="status"></p>
+          <div class="video-wait__bar" id="video-wait-bar" hidden><span></span></div>
         </div>
       </div>
-      <video class="video-player" id="video-player" playsinline muted preload="auto" aria-label="토닥이 영상"></video>
-      <button type="button" class="btn-play" id="btn-play" hidden>▶ 눌러서 재생하기</button>
+      <button type="button" class="btn-play" id="btn-play" aria-label="영상 재생하기" hidden>▶ 눌러서 재생하기</button>
       <div class="video-controls">
-        <button type="button" class="btn-chip" id="btn-sound" aria-pressed="false" hidden>🔇 소리 켜기</button>
-        <button type="button" class="btn-chip btn-chip--skip" id="btn-skip">건너뛰기</button>
+        <button type="button" class="btn-chip" id="btn-sound" aria-label="영상 소리 켜기" hidden>소리 켜기</button>
+        <button type="button" class="btn-chip btn-chip--skip" id="btn-skip" aria-label="영상 건너뛰기" hidden>건너뛰기</button>
+      </div>
+      <div class="video-bottom" id="video-bottom" hidden>
+        <button type="button" class="btn-chip" id="btn-pause" aria-label="영상 일시정지">일시정지</button>
+        <div class="video-progress" id="video-progress" role="progressbar" aria-label="영상 재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="video-progress-bar"></span></div>
       </div>
     </section>
 
@@ -96,10 +103,14 @@
         <div class="room__floor"></div>
         <div class="room__rug"></div>
         <span class="room__heart">♡</span>
-        <span class="room__todak"><img src="assets/todak.png" alt="" onerror="this.replaceWith('🐰')"></span>
+        <span class="room__todak"><img data-todak alt=""></span>
       </div>
       <div class="panel">
-        <h2 class="panel__title">조금이라도 마음이 <br>가벼워졌으면 좋겠어.</h2>
+        <h2 class="panel__title" data-focus tabindex="-1">조금이라도 마음이 <br>가벼워졌으면 좋겠어.</h2>
+        <div class="healing">
+          <p class="healing__chip" id="healing-chip"></p>
+          <p class="healing__line" id="healing-line"></p>
+        </div>
         <button type="button" class="btn btn--primary" id="btn-cheer">오늘의 응원 메시지 받기</button>
         <button type="button" class="btn btn--ghost" id="btn-again">다른 고민 이야기하기</button>
       </div>
@@ -109,10 +120,12 @@
     <div class="sheet-backdrop" id="sheet-backdrop"></div>
     <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="cheer-label" tabindex="-1">
       <div class="cheer-card" id="cheer-card">
-        <img class="cheer-card__todak" id="cheer-todak" alt="">
+        <img class="cheer-card__todak" id="cheer-todak" alt="" hidden>
         <p class="cheer-card__label" id="cheer-label">오늘의 응원</p>
+        <p class="cheer-card__keyword" id="cheer-keyword"></p>
         <p class="cheer-card__message" id="cheer-message"></p>
         <p class="cheer-card__sign">토닥이가</p>
+        <p class="cheer-card__service">대학생 전용 토닥이의 고민 상담소</p>
       </div>
       <p class="sheet__status" id="sheet-status" role="status"></p>
       <div class="sheet__actions">
@@ -124,7 +137,6 @@
   </main>
 
   <script async src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="assets/todak_card.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
