@@ -56,7 +56,7 @@ const MESSAGES = {
 };
 
 // 이미지 경로는 여기서만 관리합니다.
-const TODAK_IMAGE = "assets/todak.png";            // 토닥이 캐릭터 (없으면 "토닥이 이미지 자리" 점선 박스가 나옵니다)
+const TODAK_IMAGE = "assets/todak_christmas.png";  // 토닥이 캐릭터 (없으면 "토닥이 이미지 자리" 점선 박스가 나옵니다)
 const ROOM_IMAGE = "assets/todak_room.png";        // 방 배경 (없으면 기본으로 그린 방이 나옵니다)
 const TODAK_CARD_SCRIPT = "assets/todak_card.js";  // 응원 카드 저장용 토닥이
 
