@@ -17,10 +17,6 @@
     <!-- Scene 1. 메인 화면 -->
     <section class="scene scene--room is-active" id="scene-main" tabindex="-1">
       <div class="room" aria-hidden="true">
-        <div class="room__window"></div>
-        <div class="room__lamp"></div>
-        <div class="room__floor"></div>
-        <div class="room__rug"></div>
         <span class="room__todak"><img data-todak alt=""></span>
       </div>
       <div class="panel">
@@ -73,13 +69,14 @@
     <!-- Scene 3. 영상 재생 -->
     <section class="scene scene--video" id="scene-video" tabindex="-1">
       <!-- 자막 파일 경로는 script.js의 VIDEOS에서 넣는다 (없으면 무시) -->
-      <video class="video-player" id="video-player" playsinline muted preload="auto" aria-label="토닥이 단편 애니메이션">
+      <video class="video-player" id="video-player" playsinline muted preload="auto" aria-label="토닥이 영상">
         <track id="video-track" kind="subtitles" srclang="ko" label="한국어">
       </video>
       <!-- 영상 로딩 안내이자, 영상 파일이 없을 때의 placeholder -->
       <div class="video-wait" id="video-wait" hidden>
         <span class="video-wait__todak" aria-hidden="true"><img data-todak alt=""></span>
         <div class="video-wait__notice">
+          <p class="video-wait__title" id="video-wait-title"></p>
           <p class="video-wait__text" id="video-wait-text" role="status"></p>
           <div class="video-wait__bar" id="video-wait-bar" hidden><span></span></div>
         </div>
@@ -90,7 +87,10 @@
         <button type="button" class="btn-chip btn-chip--skip" id="btn-skip" aria-label="영상 건너뛰기" hidden>건너뛰기</button>
       </div>
       <div class="video-bottom" id="video-bottom" hidden>
-        <button type="button" class="btn-chip" id="btn-pause" aria-label="영상 일시정지">일시정지</button>
+        <div class="video-bottom__row">
+          <button type="button" class="btn-chip" id="btn-pause" aria-label="영상 일시정지">일시정지</button>
+          <p class="video-title" id="video-title"></p>
+        </div>
         <div class="video-progress" id="video-progress" role="progressbar" aria-label="영상 재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="video-progress-bar"></span></div>
       </div>
     </section>
@@ -98,10 +98,6 @@
     <!-- LAST Scene. 마무리 -->
     <section class="scene scene--room scene--last" id="scene-last" tabindex="-1">
       <div class="room room--evening" aria-hidden="true">
-        <div class="room__window"></div>
-        <div class="room__lamp"></div>
-        <div class="room__floor"></div>
-        <div class="room__rug"></div>
         <span class="room__heart">♡</span>
         <span class="room__todak"><img data-todak alt=""></span>
       </div>
@@ -135,6 +131,66 @@
     </div>
 
   </main>
+
+  <!-- 크리스마스 방 소품: script.js가 메인·마무리 화면의 방에 똑같이 넣어 준다 -->
+  <template id="room-decor">
+      <div class="room__floor"></div>
+      <div class="room__glow"></div>
+      <div class="room__rug"></div>
+      <svg class="room__lights" viewBox="0 0 400 54">
+        <path d="M0 6 Q50 42 100 12 Q150 44 200 12 Q250 44 300 12 Q350 42 400 6" fill="none" stroke="#7a5a45" stroke-width="1.6"/>
+        <g class="twinkle-group">
+          <circle cx="24" cy="24" r="5" fill="#f0c95f"/><circle cx="62" cy="27" r="5" fill="#d9605a"/>
+          <circle cx="100" cy="17" r="5" fill="#6f9c7c"/><circle cx="130" cy="26" r="5" fill="#f0c95f"/>
+          <circle cx="166" cy="28" r="5" fill="#d9605a"/><circle cx="200" cy="17" r="5" fill="#6f9c7c"/>
+          <circle cx="234" cy="28" r="5" fill="#f0c95f"/><circle cx="270" cy="26" r="5" fill="#d9605a"/>
+          <circle cx="300" cy="17" r="5" fill="#6f9c7c"/><circle cx="338" cy="27" r="5" fill="#f0c95f"/>
+          <circle cx="376" cy="24" r="5" fill="#d9605a"/>
+        </g>
+      </svg>
+      <div class="room__window">
+        <div class="room__sky">
+          <span class="room__moon"></span>
+          <span class="room__snow room__snow--far"></span>
+          <span class="room__snow"></span>
+        </div>
+        <span class="room__curtain room__curtain--left"></span>
+        <span class="room__curtain room__curtain--right"></span>
+      </div>
+      <svg class="room__wreath" viewBox="0 0 100 100">
+        <circle cx="50" cy="52" r="29" fill="none" stroke="#3f6b4e" stroke-width="17"/>
+        <circle cx="50" cy="52" r="29" fill="none" stroke="#6f9c7c" stroke-width="9" stroke-dasharray="5 7" stroke-linecap="round"/>
+        <circle cx="26" cy="40" r="4" fill="#d9605a"/><circle cx="76" cy="44" r="4" fill="#d9605a"/>
+        <circle cx="30" cy="72" r="4" fill="#d9605a"/><circle cx="72" cy="72" r="4" fill="#d9605a"/>
+        <path d="M50 22 L30 10 Q26 24 30 32 Z M50 22 L70 10 Q74 24 70 32 Z" fill="#d9605a" stroke="#d9605a" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="50" cy="22" r="6" fill="#b84a47"/>
+      </svg>
+      <svg class="room__tree" viewBox="0 0 120 160">
+        <rect x="52" y="134" width="16" height="20" rx="3" fill="#8a6248"/>
+        <g stroke-linejoin="round" stroke-width="8">
+          <path d="M60 58 L108 138 L12 138 Z" fill="#3f6b4e" stroke="#3f6b4e"/>
+          <path d="M60 36 L98 100 L22 100 Z" fill="#4c7c5c" stroke="#4c7c5c"/>
+          <path d="M60 16 L86 62 L34 62 Z" fill="#5a8d6b" stroke="#5a8d6b"/>
+        </g>
+        <path d="M34 72 Q62 88 90 68 M24 110 Q62 130 100 104" fill="none" stroke="#fff3cf" stroke-width="2.5" stroke-linecap="round"/>
+        <g class="twinkle-group">
+          <circle cx="60" cy="42" r="4.5" fill="#d9605a"/><circle cx="44" cy="62" r="4.5" fill="#f0c95f"/>
+          <circle cx="78" cy="60" r="4.5" fill="#fff3cf"/><circle cx="58" cy="82" r="5" fill="#d9605a"/>
+          <circle cx="34" cy="94" r="4.5" fill="#fff3cf"/><circle cx="84" cy="88" r="5" fill="#f0c95f"/>
+          <circle cx="44" cy="118" r="5" fill="#f0c95f"/><circle cx="72" cy="118" r="5" fill="#d9605a"/>
+          <circle cx="98" cy="126" r="4.5" fill="#fff3cf"/><circle cx="20" cy="128" r="4.5" fill="#d9605a"/>
+        </g>
+        <path class="room__star" d="M60 0 L65 11 L77 12 L68 20 L71 32 L60 26 L49 32 L52 20 L43 12 L55 11 Z" fill="#f0c95f" stroke="#f0c95f" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <svg class="room__gifts" viewBox="0 0 120 80">
+        <rect x="4" y="30" width="56" height="46" rx="6" fill="#d9705f"/>
+        <rect x="26" y="30" width="12" height="46" fill="#fff3cf"/><rect x="4" y="46" width="56" height="10" fill="#fff3cf"/>
+        <path d="M32 30 Q18 12 12 22 Q10 30 32 30 Q46 12 52 22 Q54 30 32 30 Z" fill="#fff3cf"/>
+        <rect x="64" y="46" width="50" height="30" rx="5" fill="#6f9c7c"/>
+        <rect x="83" y="46" width="11" height="30" fill="#f0c95f"/>
+        <path d="M88 46 Q76 32 72 40 Q70 46 88 46 Q100 32 104 40 Q106 46 88 46 Z" fill="#f0c95f"/>
+      </svg>
+  </template>
 
   <script async src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="script.js"></script>

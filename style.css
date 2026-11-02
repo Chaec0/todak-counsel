@@ -10,6 +10,9 @@
   --ink: #57402f;
   --ink-soft: #7d6352;
   --video-bg: #2e2320;
+  --pine: #4c7c5c;
+  --berry: #d9605a;
+  --gold: #f0c95f;
   --shadow-soft: 0 10px 30px rgba(150, 100, 70, 0.16);
   --shadow-card: 0 6px 18px rgba(150, 100, 70, 0.13);
   --fade: 0.5s;
@@ -124,7 +127,7 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   gap: 12px;
   padding: 26px 22px 22px;
   border-radius: 28px;
-  background: rgba(255, 250, 243, 0.86);
+  background: rgba(255, 250, 243, 0.94);
   box-shadow: var(--shadow-soft);
   text-align: center;
 }
@@ -147,87 +150,196 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 .healing__line { font-size: 0.8125rem; line-height: 1.45; color: var(--ink-soft); }
 
 .room {
+  --sky-top: #33406b;
+  --sky-bottom: #7a6f9c;
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: linear-gradient(180deg, #fff1dd 0%, #ffe6cc 100%);
+  /* 은은한 벽지 무늬 */
+  background:
+    radial-gradient(circle, rgba(217, 150, 110, 0.16) 1.5px, transparent 2px) 0 0 / 26px 26px,
+    linear-gradient(180deg, #ffeeda 0%, #ffdfc2 100%);
   background-position: center;
-  background-size: cover;
 }
 
-.room--evening { background: linear-gradient(180deg, #ffe9e0 0%, #ffdcd0 100%); }
+.room--evening {
+  --sky-top: #232c52;
+  --sky-bottom: #5d5587;
+  background:
+    radial-gradient(circle, rgba(217, 130, 110, 0.15) 1.5px, transparent 2px) 0 0 / 26px 26px,
+    linear-gradient(180deg, #ffe7da 0%, #ffd6c6 100%);
+}
 
+/* 전구 가랜드 */
+.room__lights {
+  position: absolute;
+  inset: 0 0 auto;
+  display: block;
+  width: 100%;
+  max-height: 80px;
+}
+
+.twinkle-group circle { animation: twinkle 2.6s ease-in-out infinite; }
+.twinkle-group circle:nth-child(2n) { animation-delay: 0.9s; }
+.twinkle-group circle:nth-child(3n) { animation-delay: 1.7s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* 눈 내리는 창문 */
 .room__window {
   position: absolute;
-  top: 6%;
-  left: 12%;
-  width: 34%;
-  max-width: 150px;
+  top: max(58px, 8%);
+  left: 11%;
+  width: 36%;
+  max-width: 158px;
   aspect-ratio: 4 / 5;
+}
+
+.room__sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
   border: 7px solid var(--cream-light);
-  border-radius: 90px 90px 12px 12px;
-  background:
-    linear-gradient(var(--cream-light), var(--cream-light)) center / 5px 100% no-repeat,
-    linear-gradient(180deg, #ffe3a8, #ffc6b0);
+  border-radius: 90px 90px 10px 10px;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
   box-shadow: var(--shadow-card);
 }
 
-.room--evening .room__window {
-  background:
-    linear-gradient(var(--cream-light), var(--cream-light)) center / 5px 100% no-repeat,
-    linear-gradient(180deg, #e9b6c8, #ffb99c);
-}
-
-/* 스탠드 */
-.room__lamp {
-  position: absolute;
-  right: 9%;
-  bottom: 22%;
-  width: 72px;
-  height: 128px;
-}
-
-.room__lamp::before { /* 불빛 */
-  content: "";
-  position: absolute;
-  top: -44px;
-  left: -44px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 233, 170, 0.85), rgba(255, 233, 170, 0) 70%);
-}
-
-.room__lamp::after { /* 갓과 기둥 */
+/* 창살과 창틀에 쌓인 눈 */
+.room__sky::after {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(#c99a78, #c99a78) center bottom / 5px 88px no-repeat,
-    linear-gradient(#c99a78, #c99a78) center bottom / 38px 6px no-repeat,
-    linear-gradient(180deg, #fff3cf, #ffd9a0) center top / 100% 44px no-repeat;
-  clip-path: polygon(24% 0, 76% 0, 100% 34%, 56% 34%, 56% 94%, 76% 94%, 76% 100%, 24% 100%, 24% 94%, 44% 94%, 44% 34%, 0 34%);
+    linear-gradient(var(--cream-light), var(--cream-light)) center / 5px 100% no-repeat,
+    radial-gradient(ellipse at 50% 100%, #fff 58%, transparent 60%) bottom / 100% 14% no-repeat;
 }
 
+.room__moon {
+  position: absolute;
+  top: 16%;
+  right: 16%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff3cf;
+  box-shadow: 0 0 14px rgba(255, 243, 207, 0.8);
+}
+
+.room__snow {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, #fff 1.6px, transparent 2.2px),
+    radial-gradient(circle, #fff 1.1px, transparent 1.7px);
+  background-size: 46px 46px, 31px 31px;
+  background-position: 6px 0, 20px 12px;
+  animation: snow-fall 7s linear infinite;
+}
+
+.room__snow--far { opacity: 0.55; animation-duration: 12s; transform: scale(0.8); }
+
+@keyframes snow-fall {
+  to { background-position: 6px 46px, 20px 74px; }
+}
+
+/* 커튼 */
+.room__curtain {
+  position: absolute;
+  top: -6px;
+  width: 30%;
+  height: 84%;
+  background: repeating-linear-gradient(90deg, #f29f8f 0 7px, #f6b5a2 7px 14px);
+  box-shadow: 0 3px 8px rgba(150, 100, 70, 0.2);
+}
+
+.room__curtain--left {
+  left: -9%;
+  border-radius: 40px 0 0 6px;
+  clip-path: polygon(0 0, 100% 0, 62% 62%, 34% 100%, 0 100%);
+}
+
+.room__curtain--right {
+  right: -9%;
+  border-radius: 0 40px 6px 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 100%, 38% 62%);
+}
+
+.room__wreath {
+  position: absolute;
+  top: max(62px, 9%);
+  right: 11%;
+  width: 22%;
+  max-width: 96px;
+  filter: drop-shadow(0 4px 5px rgba(120, 80, 60, 0.25));
+}
+
+/* 나무 바닥 */
 .room__floor {
   position: absolute;
   inset: auto 0 0;
   height: 22%;
-  background: linear-gradient(180deg, #f6c9a3, #efb891);
+  border-top: 6px solid var(--cream-light);
+  background:
+    repeating-linear-gradient(90deg, rgba(120, 75, 45, 0.16) 0 2px, transparent 2px 58px),
+    linear-gradient(180deg, #e0a578, #c98a5f);
+}
+
+/* 트리에서 번지는 따뜻한 불빛 */
+.room__glow {
+  position: absolute;
+  right: -14%;
+  bottom: 0;
+  width: 90%;
+  max-width: 420px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 224, 150, 0.62), rgba(255, 224, 150, 0) 68%);
 }
 
 .room__rug {
   position: absolute;
   left: 50%;
   bottom: 3%;
-  width: 66%;
+  width: 62%;
   height: 11%;
   max-height: 80px;
   border-radius: 50%;
-  background: var(--pink);
-  box-shadow: inset 0 0 0 6px var(--cream-light);
+  background: #dc8a80;
+  box-shadow:
+    inset 0 0 0 5px var(--cream-light),
+    inset 0 0 0 11px var(--pine),
+    inset 0 0 0 15px var(--cream-light);
   transform: translateX(-50%);
 }
+
+.room__tree {
+  --tree-h: clamp(96px, 23vh, 214px);
+  position: absolute;
+  right: 3%;
+  bottom: 9%;
+  height: var(--tree-h);
+  aspect-ratio: 120 / 160;
+  overflow: visible;
+  filter: drop-shadow(0 5px 7px rgba(90, 60, 40, 0.3));
+}
+
+.room__star { filter: drop-shadow(0 0 5px rgba(255, 214, 110, 0.95)); }
+
+.room__gifts {
+  position: absolute;
+  left: 4%;
+  bottom: 10%;
+  height: clamp(44px, 8.5vh, 76px);
+  aspect-ratio: 120 / 80;
+  filter: drop-shadow(0 4px 5px rgba(90, 60, 40, 0.28));
+}
+
+/* 마지막 화면은 패널이 길어서 트리를 조금 줄인다 */
+.scene--last .room__tree { --tree-h: clamp(90px, 18vh, 170px); }
 
 .room__todak {
   position: absolute;
@@ -285,7 +397,7 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
 .has-room-photo .room > * { display: none; }
 
 @media (max-height: 480px) {
-  .room__todak, .room__heart, .room__rug { display: none; }
+  .room__todak, .room__heart, .room__rug, .room__tree, .room__gifts { display: none; }
 }
 
 /* 낮은 화면에서는 하트가 패널에 걸리므로 숨긴다 */
@@ -293,11 +405,11 @@ button:focus-visible { outline: 3px solid var(--ink-soft); outline-offset: 2px; 
   .room__heart { display: none; }
 }
 
-/* 마지막 Scene은 패널이 길어 스탠드를 빼고, 낮은 화면에서는 토닥이를 줄여 패널에 가리지 않게 한다 */
-.scene--last .room__lamp { display: none; }
-
+/* 낮은 화면의 마지막 Scene: 소품을 줄여 패널에 가리지 않게 한다 */
 @media (max-height: 700px) {
   .scene--last .room__todak { --todak-h: clamp(72px, 13vh, 112px); }
+  .scene--last .room__tree { --tree-h: clamp(62px, 12.5vh, 84px); }
+  .scene--last .room__gifts { height: 40px; }
 }
 
 /* ===== Scene 2. 고민 선택 ===== */
@@ -435,6 +547,7 @@ video::cue { font-family: var(--font); font-size: 1rem; line-height: 1.4; }
 }
 
 .video-wait__notice { display: grid; gap: 16px; width: min(280px, 100%); animation: fade-in var(--fade) ease; }
+.video-wait__title { font-size: 0.875rem; font-weight: 700; color: var(--ink-soft); }
 .video-wait__text { font-size: 1.125rem; font-weight: 600; }
 .video-wait__bar { height: 6px; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, 0.7); }
 
@@ -492,7 +605,16 @@ video::cue { font-family: var(--font); font-size: 1rem; line-height: 1.4; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-.video-bottom .btn-chip { margin-left: 16px; }
+.video-bottom__row { display: flex; align-items: center; gap: 8px; padding: 0 16px; }
+
+.video-title {
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: rgba(255, 250, 243, 0.88);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
 
 .video-progress {
   width: 100%;
@@ -592,5 +714,6 @@ video::cue { font-family: var(--font); font-size: 1rem; line-height: 1.4; }
 /* 움직임을 줄이도록 설정한 사용자 배려 */
 @media (prefers-reduced-motion: reduce) {
   :root { --fade: 0.01s; }
-  .room__todak, .room__heart, .video-wait__todak, .btn-chip--attention { animation: none; }
+  .room__todak, .room__heart, .video-wait__todak, .btn-chip--attention,
+  .twinkle-group circle, .room__snow { animation: none; }
 }

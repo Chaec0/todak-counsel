@@ -3,20 +3,23 @@
    ================================================== */
 
 // 고민 유형별 영상 설정
-// src: 영상 파일 / poster: 영상이 뜨기 전 그림 / subtitle: 자막(VTT) 파일
+// title: 영상 제목 / src: 영상 파일 / poster: 영상이 뜨기 전 그림 / subtitle: 자막(VTT) 파일
 // poster와 subtitle은 파일이 없으면 그냥 건너뜁니다.
 const VIDEOS = {
-  anxiety: { // 영상 A. 학업 및 진로 (불안)
+  anxiety: { // 학업 및 진로 (불안)
+    title: "괜히 겁먹었어",
     src: "assets/video_anxiety.mp4",
     poster: "assets/poster_anxiety.jpg",
     subtitle: "assets/subtitle_anxiety.vtt",
   },
-  lonely: { // 영상 B. 인간관계 (외로움)
+  lonely: { // 인간관계 (외로움)
+    title: "싫어서가 아니야",
     src: "assets/video_lonely.mp4",
     poster: "assets/poster_lonely.jpg",
     subtitle: "assets/subtitle_lonely.vtt",
   },
-  guilt: { // 영상 C. 자기 자신 (자책)
+  guilt: { // 자기 자신 (자책)
+    title: "가끔은 조금 늦어도 괜찮아",
     src: "assets/video_guilt.mp4",
     poster: "assets/poster_guilt.jpg",
     subtitle: "assets/subtitle_guilt.vtt",
@@ -25,30 +28,30 @@ const VIDEOS = {
 
 // 영상별 치유포인트: 마지막 화면과 응원 카드에 나옵니다.
 const HEALING = {
-  anxiety: { keyword: "자기인정", line: "남들과 비교하기 전에, 내가 걸어온 길도 한번 돌아봐 줘." },
-  lonely:  { keyword: "소통",     line: "혼자 짐작하던 마음도, 말로 꺼내면 생각보다 가벼워질 때가 있어." },
-  guilt:   { keyword: "자기수용", line: "실수했다는 것과 부족한 사람이라는 건 달라. 친구에게 해 주는 말, 너에게도 해 줘." },
+  anxiety: { keyword: "직면",   line: "부족한 부분을 발견하면 속상하지. 그래도 그게 네가 해온 모든 걸 부정하는 건 아니야." },
+  lonely:  { keyword: "담담함", line: "누군가의 거절이 항상 너에 대한 거절은 아니야. 없는 이유까지 혼자 만들어 내며 상처받지 않아도 돼." },
+  guilt:   { keyword: "여유",   line: "항상 잘하려고 애써 왔잖아. 가끔 생기는 작은 실수까지 너를 몰아붙이지 않아도 돼." },
 };
 
 // 오늘의 응원 문구: 따옴표 안의 글을 고치거나 줄을 추가하세요. (해결책 말고 공감과 인정 위주로!)
 const MESSAGES = {
   anxiety: [
-    "다들 앞서가는 소식만 보이는 날엔 괜히 작아지지. 그 마음, 나도 알아.",
-    "남의 소식에 마음이 쪼그라든 날에도, 네가 쌓아 온 시간은 그대로 있어.",
-    "처음 입학했을 때의 네가 지금의 너를 보면 꽤 놀랄 거야. 그만큼 걸어왔잖아.",
-    "아직 보여 줄 게 없는 것 같아도, 네가 버텨 온 날들은 전부 네 거야.",
+    "제일 괜찮다고 생각한 부분을 지적받으면 귀가 축 처지지. 그 마음, 나도 알아.",
+    "파일을 열기 싫은 날도 있어. 못한 부분을 다시 보는 건 원래 겁나는 일이야.",
+    "부족한 부분이 보였다고 네가 해 온 것까지 없어지는 건 아니야.",
+    "며칠 동안 붙들고 있던 시간은 그대로 네 거야. 지적 하나로 사라지지 않아.",
   ],
   lonely: [
-    "답장 하나에 하루 종일 마음이 왔다 갔다 했지. 그만큼 그 친구가 소중한 거야.",
-    "혼자 이런저런 생각을 하다 보면 더 서운해지지. 나도 그런 날이 있어.",
-    "서운했다는 말, 꺼내도 괜찮아. 그런다고 네가 속 좁은 사람이 되는 건 아니야.",
-    "삼켜 버린 마음도 네 진짜 마음이야. 언젠가 말하고 싶어지면, 그래도 괜찮아.",
+    "메시지를 썼다 지웠다 하다 겨우 보냈는데 거절당하면, 마음이 금세 가라앉지.",
+    "답장 한 줄을 몇 번이고 다시 읽게 되는 날이 있어. 나도 그랬어.",
+    "\"이번 주말은 어렵다\"는 말이 \"네가 싫다\"는 말은 아니었을지도 몰라.",
+    "먼저 연락한 것만으로도 큰 용기였어. 그 마음은 그대로 소중해.",
   ],
   guilt: [
-    "발표가 끝나고도 그 장면만 몇 번이고 떠올랐지. 그런 밤, 나도 알아.",
-    "친구가 실수했다면 넌 분명 다정하게 말해 줬을 거야. 너한테도 그래도 괜찮아.",
-    "실수 하나로 네가 달라지는 건 아니야. 오늘은 너한테 조금 다정해도 돼.",
-    "스스로를 탓하느라 오늘 밤이 참 길었겠다. 그만큼 잘하고 싶었던 거잖아.",
+    "늦잠 하나에 하루가 다 망한 것 같은 아침이 있지. 나도 그런 날이 있어.",
+    "눈앞에서 버스를 놓치면 괜히 풀이 죽지. 늘 일찍 다녔으니까 더 그래.",
+    "늘 잘하려고 애써 왔잖아. 가끔 조금 늦어도 너는 그대로 괜찮아.",
+    "숨 좀 고른다고 뒤처지는 건 아니야. 오늘 하늘도 꽤 맑더라.",
   ],
 };
 
@@ -108,6 +111,11 @@ function showScene(id) {
   focusTarget.focus({ preventScroll: true });
 }
 
+/* ----- 크리스마스 방 소품을 방마다 넣기 ----- */
+document.querySelectorAll(".room").forEach((room) => {
+  room.prepend($("room-decor").content.cloneNode(true));
+});
+
 /* ----- 이미지: 파일이 있을 때만 적용 ----- */
 const roomProbe = new Image();
 roomProbe.onload = () => {
@@ -155,6 +163,7 @@ function startVideo(type) {
   showScene("scene-video");
 
   const config = VIDEOS[type];
+  showVideoTitle(config && config.title);
   if (!config || !config.src) {
     showVideoPlaceholder();
     return;
@@ -172,6 +181,13 @@ function startVideo(type) {
       skipButton.hidden = false;
     }
   });
+}
+
+// 영상 제목: 로딩 화면과 재생 중 하단에 함께 보여 준다
+function showVideoTitle(title) {
+  $("video-wait-title").textContent = title || "";
+  $("video-title").textContent = title || "";
+  video.setAttribute("aria-label", title ? `토닥이 영상: ${title}` : "토닥이 영상");
 }
 
 function clearVideoTimers() {
